@@ -7,9 +7,9 @@ public class Game {
     private final Grid grid;
     private final Player p1;
     private final Player p2;
+    private final Scanner scanner;
     private Player currentPlayer;
     private GameState state;
-    private final Scanner scanner;
 
     public Game(Player p1, Player p2) {
         this.p1 = p1;
@@ -19,15 +19,24 @@ public class Game {
         scanner = new Scanner(System.in);
     }
 
-    public GameState getState() {
-        return state;
-    }
-
     public void setPlayer() {
         currentPlayer = currentPlayer == p1 ? p2 : p1;
         switch (currentPlayer.getType()) {
             case PLAYER_X -> System.out.println(Messages.X_ENTER_PLAY);
             case PLAYER_O -> System.out.println(Messages.O_ENTER_PLAY);
+        }
+    }
+
+    public void acceptMove() {
+        int[] pos = getPlayerInput();
+
+        if (isValidMove(pos)) {
+            int row = pos[0];
+            int col = pos[1];
+            drawMove(row, col);
+            updateState(row, col);
+        } else {
+            acceptMove();
         }
     }
 
@@ -49,36 +58,8 @@ public class Game {
         return pos;
     }
 
-    private boolean isValidMove(int[] pos) {
-        int row = pos[0];
-        int col = pos[1];
-
-        if (row < 0 || row >= Grid.SIZE || col < 0 || col >= Grid.SIZE || CellState.EMPTY != grid.getCellState(row, col)) {
-            System.out.println(Messages.INVALID_PLAY);
-            return false;
-        }
-        return true;
-    }
-
-    public void acceptMove() {
-        int[] pos = getPlayerInput();
-
-        if (isValidMove(pos)) {
-            int row = pos[0];
-            int col = pos[1];
-            drawMove(row, col);
-            updateState(row, col);
-        } else {
-            acceptMove();
-        }
-    }
-
-    private void drawMove(int row, int col) {
-        switch (currentPlayer.getType()) {
-            case PLAYER_X -> grid.setCellState(row, col, CellState.X_CELL);
-            case PLAYER_O -> grid.setCellState(row, col, CellState.O_CELL);
-        }
-        grid.draw();
+    public GameState getState() {
+        return state;
     }
 
     private void updateState(int row, int col) {
@@ -100,6 +81,25 @@ public class Game {
                 }
             }
         }
+    }
+
+    private boolean isValidMove(int[] pos) {
+        int row = pos[0];
+        int col = pos[1];
+
+        if (row < 0 || row >= Grid.SIZE || col < 0 || col >= Grid.SIZE || CellState.EMPTY != grid.getCellState(row, col)) {
+            System.out.println(Messages.INVALID_PLAY);
+            return false;
+        }
+        return true;
+    }
+
+    private void drawMove(int row, int col) {
+        switch (currentPlayer.getType()) {
+            case PLAYER_X -> grid.setCellState(row, col, CellState.X_CELL);
+            case PLAYER_O -> grid.setCellState(row, col, CellState.O_CELL);
+        }
+        grid.draw();
     }
 
     private boolean isDraw() {
@@ -159,5 +159,4 @@ public class Game {
         }
         return true;
     }
-
 }

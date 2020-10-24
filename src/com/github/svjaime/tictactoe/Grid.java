@@ -20,14 +20,6 @@ public class Grid {
         draw();
     }
 
-    public void setCellState(int row, int col, CellState state) {
-        cells[row][col].setState(state);
-    }
-
-    public CellState getCellState(int row, int col) {
-        return cells[row][col].getState();
-    }
-
     public void draw() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -37,4 +29,11 @@ public class Grid {
         }
     }
 
+    public void setCellState(int row, int col, CellState state) {
+        cells[row][col].setState(state);
+    }
+
+    public CellState getCellState(int row, int col) {
+        return cells[row][col].getState();
+    }
 }

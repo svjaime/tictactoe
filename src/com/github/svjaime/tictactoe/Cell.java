@@ -8,6 +8,10 @@ public class Cell {
         state = CellState.EMPTY;
     }
 
+    public void draw() {
+        System.out.print(state.getSymbol());
+    }
+
     public CellState getState() {
         return state;
     }
@@ -15,9 +19,4 @@ public class Cell {
     public void setState(CellState state) {
         this.state = state;
     }
-
-    public void draw() {
-        System.out.print(state.getSymbol());
-    }
-
 }
